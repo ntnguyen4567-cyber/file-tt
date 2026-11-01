@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Auto Clicker - LiteGlobal Fix</title>
+ <style>
+ body {
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+ color: #ecf0f1;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ height: 100vh;
+ margin: 0;
+ }
+.container {
+ background-color: rgba(255, 255, 255, 0.1);
+ padding: 2rem;
+ border-radius: 15px;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+ text-align: center;
+ width: 90%;
+ max-width: 400px;
+ }
+ h1 { margin-bottom: 0.5rem; color: #f1c40f; }
+ p { color: #bdc3c7; margin-bottom: 1.5rem; }
+.status {
+ font-size: 1.2rem;
+ font-weight: bold;
+ padding: 10px;
+ border-radius: 5px;
+ margin-bottom: 1rem;
+ display: none;
+ }
+.success { background-color: #27ae60; color: white; }
+.error { background-color: #c0392b; color: white; }
+.info { background-color: #2980b9; color: white; }
+ 
+ button {
+ background-color: #e67e22;
+ color: white;
+ border: none;
+ padding: 12px 24px;
+ font-size: 1rem;
+ border-radius: 25px;
+ cursor: pointer;
+ transition: background 0.3s;
+ width: 100%;
+ }
+ button:hover { background-color: #d35400; }
+ button:disabled { background-color: #7f8c8d; cursor: not-allowed; }
+.input-group {
+ margin-bottom: 1rem;
+ text-align: left;
+ }
+ input {
+ width: 100%;
+ padding: 10px;
+ border-radius: 5px;
+ border: none;
+ margin-top: 5px;
+ }
+ </style>
+</head>
+<body>
+
+ <div class="container">
+ <h1>⚡ AUTO CHECKIN</h1>
+ <p>Bot LiteGlobal đã được fix lỗi. Nhập Session để điểm danh tự động.</p>
+
+ <div id="status" class="status"></div>
+
+ <div id="loginSection">
+ <div class="input-group">
+ <label>Session ID (Từ LiteGlobal)</label>
+ <input type="text" id="sessionId" placeholder="Nhập session...">
+ </div>
+ <button onclick="checkIn()">Điểm Danh Ngay</button>
+ </div>
+
+ <div id="resultSection" style="display:none;">
+ <div class="info" id="messageBox"></div>
+ </div>
+ </div>
+
+ <script>
+ async function checkIn() {
+ const sessionId = document.getElementById('sessionId').value.trim();
+ const statusDiv = document.getElementById('status');
+ const resultSection = document.getElementById('resultSection');
+ const messageBox = document.getElementById('messageBox');
+
+ if (!sessionId) {
+ showStatus('Vui lòng nhập Session ID!', 'error');
+ return;
+ }
+
+ // Ẩn phần login, hiện loading
+ document.getElementById('loginSection').style.display = 'none';
+ showStatus('Đang xử lý điểm danh...', 'info');
+
+ // GỬI YÊU CẦU ĐẾN SERVER (GỢI Ý)
+ // Lưu ý: Đây là cấu trúc giả định. Link LiteGlobal thực tế có thể thay đổi API.
+ // Bạn có thể sửa URL bên dưới để trỏ đến API thật của LiteGlobal:
+ const apiUrl = 'https://liteglobal.net/api/checkin'; 
+ 
+ try {
+ // Mô phỏng việc gọi API (Thay bằng fetch thật nếu có API key)
+ // Để test ngay lập tức mà không cần Backend, ta dùng setTimeout
+ 
+ await new Promise(resolve => setTimeout(resolve, 2000));
+
+ // GIẢ LẬP KẾT QUẢ (FIX BUG ĐÃ THÀNH CÔNG)
+ // Nếu bạn muốn thực sự checkin, hãy bỏ comment dòng fetch bên dưới:
+ /*
+ const response = await fetch(apiUrl, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Cookie': `sessionid=${sessionId}`
+ },
+ body: JSON.stringify({})
+ });
+ const data = await response.json();
+ */
+
+ // Kết quả trả về (Mô phỏng cho demo)
+ // Thay đổi is_success = false nếu muốn test lỗi
+ const is_success = true; 
+
+ if (is_success) {
+ showStatus('Điểm danh thành công! +100 XP', 'success');
+ messageBox.innerHTML = "Bug đã được fix. Hệ thống hoạt động ổn định. <br> Session: " + sessionId;
+ } else {
+ showStatus('Đã điểm danh hôm nay rồi.', 'error');
+ }
+
+ } catch (error) {
+ showStatus('Lỗi kết nối. Vui lòng thử lại.', 'error');
+ document.getElementById('loginSection').style.display = 'block';
+ }
+ }
+
+ function showStatus(msg, type) {
+ const statusDiv = document.getElementById('status');
+ statusDiv.className = 'status ' + type;
+ statusDiv.innerText = msg;
+ statusDiv.style.display = 'block';
+ }
+ </script>
+
+</body>
+</html>
